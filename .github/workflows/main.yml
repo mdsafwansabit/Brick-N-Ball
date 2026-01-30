@@ -10,10 +10,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Updated to v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5 # Updated to v5
       with:
         python-version: '3.10'
 
@@ -27,7 +27,7 @@ jobs:
         pyinstaller --noconsole --onefile --name "Brick Junior Ball" brick_junior_ultimate.py
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4 # This was the error! Now updated to v4
       with:
         name: Brick-Junior-Ball-EXE
         path: dist/Brick Junior Ball.exe
