@@ -1,0 +1,33 @@
+name: Build Brick Junior Ball EXE
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4  # Updated to v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5 # Updated to v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pygame pyinstaller
+
+    - name: Build EXE with PyInstaller
+      run: |
+        pyinstaller --noconsole --onefile --name "Brick Junior Ball" brick_junior_ball.py
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4 # This was the error! Now updated to v4
+      with:
+        name: Brick-Junior-Ball-EXE
+        path: dist/Brick Junior Ball.exe
