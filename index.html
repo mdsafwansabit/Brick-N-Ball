@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brick Junior Ball</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Fredoka', sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+    color:white;
+    overflow-x:hidden;
+}
+
+/* 3D Canvas */
+#bg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+/* Hero */
+.hero{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+.hero h1{
+    font-size:60px;
+    background:linear-gradient(45deg,#ff00cc,#00f2ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 30px rgba(255,255,255,0.3);
+}
+
+.hero p{
+    margin-top:20px;
+    font-size:20px;
+    max-width:600px;
+}
+
+.download-btn{
+    margin-top:40px;
+    padding:18px 50px;
+    font-size:20px;
+    border-radius:50px;
+    background:linear-gradient(45deg,#ff00cc,#00f2ff);
+    color:white;
+    text-decoration:none;
+    transition:0.4s;
+    box-shadow:0 0 20px #ff00cc;
+}
+
+.download-btn:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 40px #00f2ff;
+}
+
+/* Sections */
+section{
+    padding:100px 10%;
+    text-align:center;
+}
+
+.section-title{
+    font-size:40px;
+    margin-bottom:50px;
+}
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:40px;
+}
+
+.card{
+    background:rgba(255,255,255,0.1);
+    padding:40px;
+    border-radius:25px;
+    backdrop-filter:blur(10px);
+    transition:0.4s;
+}
+
+.card:hover{
+    transform:translateY(-15px) scale(1.05);
+}
+
+footer{
+    padding:40px;
+    text-align:center;
+    background:rgba(0,0,0,0.4);
+}
+
+@media(max-width:768px){
+    .hero h1{font-size:35px;}
+    .hero p{font-size:16px;}
+    section{padding:70px 5%;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="hero">
+    <h1>Brick Junior Ball</h1>
+    <p>A Fun 3D Arcade Brick Breaker Game Loved by Players Around the World 🌍</p>
+
+    <!-- PUT YOUR GITHUB RELEASE LINK -->
+    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases" target="_blank" class="download-btn">
+        Download For Windows
+    </a>
+</div>
+
+<section>
+    <h2 class="section-title">Why Players Love It ❤️</h2>
+    <div class="features">
+        <div class="card">
+            <h3>🧱 Colorful Bricks</h3>
+            <p>Bright neon bricks make every level exciting and fun.</p>
+        </div>
+        <div class="card">
+            <h3>⚽ Smooth Ball Physics</h3>
+            <p>Realistic movement and bounce animations.</p>
+        </div>
+        <div class="card">
+            <h3>🎮 Easy Controls</h3>
+            <p>Perfect for children and beginners worldwide.</p>
+        </div>
+        <div class="card">
+            <h3>🏆 Global Fun</h3>
+            <p>International arcade style experience.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Brick Junior Ball | Created by Safwan Sabit</p>
+</footer>
+
+<!-- THREE JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+// Scene
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("bg"), alpha:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Ball
+const ballGeometry = new THREE.SphereGeometry(0.7,32,32);
+const ballMaterial = new THREE.MeshStandardMaterial({color:0xff00cc, emissive:0xff00cc});
+const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+scene.add(ball);
+
+// Light
+const light = new THREE.PointLight(0xffffff,2);
+light.position.set(5,5,5);
+scene.add(light);
+
+// Bricks
+const bricks = [];
+for(let i=-4;i<=4;i+=2){
+    const brickGeo = new THREE.BoxGeometry(1.5,0.7,0.7);
+    const brickMat = new THREE.MeshStandardMaterial({color:Math.random()*0xffffff});
+    const brick = new THREE.Mesh(brickGeo,brickMat);
+    brick.position.set(i,2,0);
+    scene.add(brick);
+    bricks.push(brick);
+}
+
+camera.position.z = 8;
+
+// Animation
+let direction = 0.03;
+
+function animate(){
+    requestAnimationFrame(animate);
+
+    ball.position.x += direction;
+    if(ball.position.x > 4 || ball.position.x < -4){
+        direction *= -1;
+    }
+
+    ball.rotation.x += 0.05;
+    ball.rotation.y += 0.05;
+
+    bricks.forEach(brick=>{
+        brick.rotation.y += 0.01;
+    });
+
+    renderer.render(scene,camera);
+}
+animate();
+
+// Resize
+window.addEventListener("resize",()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
+
+</body>
+</html>
