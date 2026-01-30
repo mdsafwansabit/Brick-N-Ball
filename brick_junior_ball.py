@@ -142,7 +142,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption("Brick Junior Ball - Ultimate Edition")
+        pygame.display.set_caption("Brick Junior Ball")
         self.clock = pygame.time.Clock()
         
         # Fonts
