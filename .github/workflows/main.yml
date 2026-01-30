@@ -24,7 +24,7 @@ jobs:
 
     - name: Build EXE with PyInstaller
       run: |
-        pyinstaller --noconsole --onefile --name "Brick Junior Ball" brick_junior_ultimate.py
+        pyinstaller --noconsole --onefile --name "Brick Junior Ball" brick_junior_ball.py
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4 # This was the error! Now updated to v4
